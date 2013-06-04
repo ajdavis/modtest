@@ -12,10 +12,8 @@ initmodtest(void)
 {
     PyObject *m;
 
+    PyObject* leaked_str = PyString_FromString("Leak me!");
+
     /* Create the module and add the functions */
     m = Py_InitModule3("modtest", modtest_methods, module_doc);
-    if (m == NULL)
-        return;
-
-    PyErr_SetString(PyExc_ImportError, "foo bar");
 }
