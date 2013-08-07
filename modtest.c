@@ -1,7 +1,14 @@
 #include "Python.h"
 
+static PyObject* method(PyObject* self, PyObject* args) {
+    PyObject *leaked = PyString_FromString("Leak!");
+    Py_XINCREF(leaked);
+    return leaked;
+}
+
 static PyMethodDef modtest_methods[] = {
-    {NULL,              NULL}           /* sentinel */
+    {"method", method, METH_VARARGS, ""},
+    {NULL,              NULL} /* sentinel */
 };
 
 PyDoc_STRVAR(module_doc,
@@ -10,10 +17,8 @@ PyDoc_STRVAR(module_doc,
 PyMODINIT_FUNC
 initmodtest(void)
 {
-    PyObject *m;
-
-    PyObject* leaked_str = PyString_FromString("Leak me!");
-
-    /* Create the module and add the functions */
-    m = Py_InitModule3("modtest", modtest_methods, module_doc);
+    PyObject *m = Py_InitModule3(
+        "modtest",
+        modtest_methods,
+        module_doc);
 }
