@@ -1,8 +1,11 @@
+#include <stdlib.h>
 #include "Python.h"
 
 static PyObject* method(PyObject* self, PyObject* args) {
-    PyObject *leaked = PyString_FromString("Leak!");
-    Py_XINCREF(leaked);
+    PyObject *leaked = NULL;
+    if ((float)rand()/(float)RAND_MAX > 0.5)
+        leaked = PyString_FromString("Leak!");
+
     return leaked;
 }
 
